@@ -28,16 +28,31 @@ function validate() {
   var options = getValue(optionsEditor);
   var schema = getValue(schemaEditor);
   var data = getValue(dataEditor);
-  if (!(options && schema && data)) return;
-  var ajv = new Ajv(options);
   var session = resultsEditor.getSession();
-  if (ajv.validate(schema, data)) {
-    resultsEditor.setValue('Valid');
-    session.setMode('ace/mode/text');
+  session.setMode('ace/mode/text');
+  session.setUseWrapMode(false);
+  var results;
+  if (typeof options == 'object' && typeof schema == 'object' && data !== undefined) {
+    var ajv = new Ajv(options);
+    var validate;
+    try {
+      validate = ajv.compile(schema);
+      if (validate(data)) {
+        results = 'Data is valid';
+      } else {
+        results = JSON.stringify(validate.errors, null, '  ');
+        session.setMode('ace/mode/json');
+      }
+    } catch(e) {
+      results = e.message;
+      session.setUseWrapMode(true);
+    }
   } else {
-    resultsEditor.setValue(JSON.stringify(ajv.errors, null, '  '));
-    session.setMode('ace/mode/json');
-  }
+    results = typeof options == 'object' ? '' : 'Options should be an object\n';
+    results += typeof schema == 'object' ? '' : 'Schema should be an object\n';
+    results += data !== undefined ? '' : 'Data should be valid JSON';
+  };
+  resultsEditor.setValue(results);
   resultsEditor.gotoLine(1);
 }
 
