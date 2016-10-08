@@ -1,0 +1,39 @@
+.options-section {
+  position: absolute;
+  top: 0;
+  right: 50%;
+  left: 0;
+  height: 200px;
+}
+
+.results-section {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 50%;
+  height: 200px;
+}
+
+.schema-section { 
+  position: absolute;
+  top: 200px;
+  right: 50%;
+  bottom: 0;
+  left: 0;
+}
+
+.data-section { 
+  position: absolute;
+  top: 200px;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+}
+
+.editor {
+  position: absolute!important;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 0;  
+}
