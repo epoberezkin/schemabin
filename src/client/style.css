@@ -1,3 +1,7 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
 bin-validator {
   position: absolute;
   top: 0;
