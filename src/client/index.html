@@ -3,26 +3,19 @@
 <head>
   <title>SchemaBin - JSON-Schema web playground</title>
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js" integrity="sha256-xx76EmQ2A+LP9GzPIVjY5UDJJMbR/BSiTvMWi0as4/I=" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ajv/4.7.7/ajv.bundle.js" integrity="sha256-pNe09DGQpkrq3+UGQaL15a8tkzFjyxwtoD5PU0kVF50=" crossorigin="anonymous"></script>
 </head>
 <body>
-  <section class="options-section">
-    <h2>Validator options</h2>
-    <div id="options" class="editor"></div>
-  </section>
+  <bin-validator name="options" caption="Validator options"></bin-validator>
   <section class="results-section">
     <h2>Results</h2>
     <div id="results" class="editor"></div>
   </section>
-  <section class="schema-section">
-    <h2>Schema</h2>
-    <div id="schema" class="editor"></div>
-  </section>
-  <section class="data-section">
-    <h2>Data</h2>
-    <div id="data" class="editor"></div>
-  </section>
-  <script type="text/javascript" src="index.js"></script>
+  <bin-schema class="schema-section" name="schema" caption="Schema"></bin-schema>
+  <bin-data class="data-section" name="data" caption="Data"></bin-data>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js" integrity="sha256-xx76EmQ2A+LP9GzPIVjY5UDJJMbR/BSiTvMWi0as4/I=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ajv/4.7.7/ajv.bundle.js" integrity="sha256-pNe09DGQpkrq3+UGQaL15a8tkzFjyxwtoD5PU0kVF50=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/document-register-element/1.2.0/document-register-element.js" integrity="sha256-Uha5LRGPBZh1xoDy1pht/LDkOssOAw8m7JMTQE8rvg0=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="app.bundle.js"></script>
 </body>
 </html>

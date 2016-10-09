@@ -1,0 +1,25 @@
+{
+  "name": "schemabin",
+  "version": "0.1.0",
+  "description": "JSON-Schema web playground",
+  "main": "index.js",
+  "dependencies": {
+    "browserify": "^13.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bundle": "browserify src/client/index.js -o dist/app.bundle.js",
+    "build": "npm run bundle && cp src/client/*.html dist && cp src/client/*.css dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epoberezkin/schemabin.git"
+  },
+  "author": "Evgeny Poberezkin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/epoberezkin/schemabin/issues"
+  },
+  "homepage": "https://github.com/epoberezkin/schemabin#readme"
+}

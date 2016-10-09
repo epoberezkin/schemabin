@@ -1,4 +1,4 @@
-.options-section {
+bin-validator {
   position: absolute;
   top: 0;
   right: 50%;
@@ -30,7 +30,7 @@
   left: 50%;
 }
 
-.editor {
+json-editor, .editor {
   position: absolute!important;
   top: 50px;
   right: 0;
