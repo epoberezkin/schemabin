@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+  git diff --name-only $TRAVIS_COMMIT_RANGE | grep -qE '\.html$|\.js$|\.json$|\.css$' && {
+    npm run build
+    rm -rf ../gh-pages
+    git clone -b gh-pages --single-branch https://${GITHUB_TOKEN}@github.com/epoberezkin/schemabin.git ../gh-pages
+    cp -r dist/* ../ghpages
+    cd ../gh-pages
+    git config user.email "$GIT_USER_EMAIL"
+    git config user.name "$GIT_USER_NAME"
+    git add .
+    git commit -am "updated by travis build #$TRAVIS_BUILD_NUMBER"
+    git push --quiet origin gh-pages > /dev/null 2>&1
+  }
+fi
