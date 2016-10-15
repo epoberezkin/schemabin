@@ -2,6 +2,10 @@ body {
   font-family: Arial, sans-serif;
 }
 
+h2 {
+  margin: 0;
+}
+
 bin-validator {
   position: absolute;
   top: 0;

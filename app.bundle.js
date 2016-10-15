@@ -37,6 +37,11 @@ module.exports = function addAttribute(ElClass, attrName) {
 var BinEditor = require('./bin-editor');
 
 class BinData extends BinEditor {
+  getValue() {
+    return {
+      data: this.editor.getValue()
+    };
+  }
 }
 
 customElements.define('bin-data', BinData);
@@ -48,9 +53,19 @@ var attributes = require('../attributes');
 
 class BinEditor extends HTMLElement {
   connectedCallback() {
+    this.statusEl = document.createElement('div');
+    this.statusEl.className = 'module-status';
+    this.appendChild(this.statusEl);
+
     this.editor = document.createElement('json-editor');
     this.editor.id = this.getAttribute('name');
     this.appendChild(this.editor);
+
+    this.editor.on('change', () => {
+      var invalid = this.editor.getValue() === undefined;
+      this.statusEl.innerHTML = invalid ? 'JSON error': '';
+      if (invalid) return false;
+    });
   }
 }
 
@@ -71,6 +86,10 @@ class BinModules extends HTMLElement {
     this.appendChild(mod);
     this.modules = [mod];
   }
+
+  getValues() {
+    return this.modules.map(m => m.getValue());
+  }
 }
 
 attributes(BinModules, 'caption');
@@ -81,13 +100,27 @@ customElements.define('bin-modules', BinModules);
 'use strict';
 
 var BinEditor = require('./bin-editor');
+var ajv = new Ajv({v5: true});
 
 class BinSchema extends BinEditor {
-  // connectedCallback() {
-  //   this.editor = document.createElement('json-editor');
-  //   this.editor.id = this.getAttribute('name');
-  //   this.appendChild(this.editor);
-  // }
+  connectedCallback() {
+    super.connectedCallback();
+    this.editor.on('change', () => {
+      var schema = this.editor.getValue();
+      if (schema === undefined) return;
+      this.statusEl.innerHTML = typeof schema != 'object'
+                                ? 'Must be object'
+                                : ajv.validateSchema(schema)
+                                  ? ''
+                                  : 'Schema is invalid';
+    });
+  }
+
+  getValue() {
+    return {
+      schema: this.editor.getValue()
+    };
+  }
 }
 
 customElements.define('bin-schema', BinSchema);
@@ -118,10 +151,16 @@ class JSONEditor extends HTMLElement {
   connectedCallback() {
     var editor = this.ace = ace.edit(this.id);
     editor.$blockScrolling = Infinity;
-    var session = editor.getSession();
+    var session = this.ace_session = editor.getSession();
     session.setMode('ace/mode/json');
     session.setTabSize(2);
     session.setUseSoftTabs(true);
+
+    session.on('change', () => {
+      var text = this.ace.getValue();
+      try { this.ace_value = JSON.parse(text); }
+      catch(e) { this.ace_value = undefined; }
+    });
   }
 
   setValue(data) {
@@ -131,13 +170,11 @@ class JSONEditor extends HTMLElement {
   }
 
   getValue() {
-    var text = this.ace.getValue();
-    try { return JSON.parse(text); } catch(e) {}
+    return this.ace_value;
   }
 
   on() {
-    var session = this.ace.getSession();
-    return session.on.apply(session, arguments);
+    return this.ace_session.on.apply(this.ace_session, arguments);
   }
 }
 
@@ -151,6 +188,7 @@ require('./elements');
 var optionsEditor = getEditor('options', {allErrors: true});
 var schemaEditor = getEditor('schema', {$schema: 'http://json-schema.org/draft-04/schema#'});
 var dataEditor = getEditor('data', {});
+var schemaModules = document.getElementById('schemas');
 
 var resultsEditor = ace.edit('results');
 resultsEditor.setReadOnly(true);
@@ -167,6 +205,7 @@ function getEditor(id, data) {
 function validate() {
   var options = optionsEditor.getValue();
   var schema = schemaEditor.getValue();
+  // var schemas = schemaModules.getValues();
   var data = dataEditor.getValue();
   var session = resultsEditor.getSession();
   session.setMode('ace/mode/text');
