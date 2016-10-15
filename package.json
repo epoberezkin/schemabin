@@ -10,7 +10,8 @@
   "scripts": {
     "test": "echo \"No test yet\"",
     "bundle": "browserify src/client/index.js -o dist/app.bundle.js",
-    "build": "npm run bundle && cp src/client/*.html dist && cp src/client/*.css dist"
+    "copy": "cp src/client/*.html dist && cp src/client/*.css dist",
+    "build": "mkdir -p dist && npm run bundle && npm run copy"
   },
   "repository": {
     "type": "git",
