@@ -7,7 +7,7 @@ if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
     npm run build
     rm -rf ../gh-pages
     git clone -b gh-pages --single-branch https://${GITHUB_TOKEN}@github.com/epoberezkin/schemabin.git ../gh-pages
-    cp -r dist/* ../ghpages
+    cp -r dist/* ../gh-pages
     cd ../gh-pages
     git config user.email "$GIT_USER_EMAIL"
     git config user.name "$GIT_USER_NAME"
