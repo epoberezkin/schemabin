@@ -4,10 +4,16 @@ class JSONEditor extends HTMLElement {
   connectedCallback() {
     var editor = this.ace = ace.edit(this.id);
     editor.$blockScrolling = Infinity;
-    var session = editor.getSession();
+    var session = this.ace_session = editor.getSession();
     session.setMode('ace/mode/json');
     session.setTabSize(2);
     session.setUseSoftTabs(true);
+
+    session.on('change', () => {
+      var text = this.ace.getValue();
+      try { this.ace_value = JSON.parse(text); }
+      catch(e) { this.ace_value = undefined; }
+    });
   }
 
   setValue(data) {
@@ -17,13 +23,11 @@ class JSONEditor extends HTMLElement {
   }
 
   getValue() {
-    var text = this.ace.getValue();
-    try { return JSON.parse(text); } catch(e) {}
+    return this.ace_value;
   }
 
   on() {
-    var session = this.ace.getSession();
-    return session.on.apply(session, arguments);
+    return this.ace_session.on.apply(this.ace_session, arguments);
   }
 }
 

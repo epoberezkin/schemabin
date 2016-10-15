@@ -5,6 +5,7 @@ require('./elements');
 var optionsEditor = getEditor('options', {allErrors: true});
 var schemaEditor = getEditor('schema', {$schema: 'http://json-schema.org/draft-04/schema#'});
 var dataEditor = getEditor('data', {});
+var schemaModules = document.getElementById('schemas');
 
 var resultsEditor = ace.edit('results');
 resultsEditor.setReadOnly(true);
@@ -21,6 +22,7 @@ function getEditor(id, data) {
 function validate() {
   var options = optionsEditor.getValue();
   var schema = schemaEditor.getValue();
+  // var schemas = schemaModules.getValues();
   var data = dataEditor.getValue();
   var session = resultsEditor.getSession();
   session.setMode('ace/mode/text');

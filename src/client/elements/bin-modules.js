@@ -10,6 +10,10 @@ class BinModules extends HTMLElement {
     this.appendChild(mod);
     this.modules = [mod];
   }
+
+  getValues() {
+    return this.modules.map(m => m.getValue());
+  }
 }
 
 attributes(BinModules, 'caption');
